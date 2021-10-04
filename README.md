@@ -86,7 +86,7 @@ The following options should be set:
 | Command | What you want. Recommendet `/appversions` |
 | Request Url | https://[SubDomain].vercel.app/api/slashcommand |
 | Short description | See and manage the current versions of our mobile applications |
-| Usage Hint | [add remove get] [android|ios] appId |
+| Usage Hint | [add remove get] [android\|ios] appId |
 
 Click **Save**.
 

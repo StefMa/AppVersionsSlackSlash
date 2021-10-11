@@ -27,7 +27,7 @@ Get the current (shorted) URL from the saved appIds to [AppVersions](https://app
 Run the vercel cli (`vercel`) to create an project on vercel.
 After that we're able to set environment variables for this project.
 
-We have to set the following environment variables:
+We have to set the following **environment variables**:
 
 **`FIREBASE_SERVICE_ACCOUNT`**
 </br>
@@ -52,8 +52,16 @@ The key can be found under the project settings.
 
 Place the API Key in this environment variable.
 
+**`SLACK_SIGNING_SECRET`**
+</br>
+Because we are verifying the request, according to the [Slack documentation](https://api.slack.com/authentication/verifying-requests-from-slack), we have to set the Slack Signing Secret as a environment variable.
+
+The Signing Secret can be found under the Slack App "Basic Information" menu under "App Credentials".
+
+Simply store this Key in this environment variable.
+
 **Redeploy the project**
-<br>
+</br>
 After we set up all the environment variables we have to redeploy the vercel project.
 Otherwise the environment variables aren't visible.
 

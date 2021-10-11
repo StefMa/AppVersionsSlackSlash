@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"os"
 	"stefma.guru/appVersionsSlackSlash/database"
-	"stefma.guru/appVersionsSlackSlash/domain"
+	"stefma.guru/appVersionsSlackSlash/domain/model"
 	"strings"
 )
 
@@ -21,42 +21,39 @@ func HandleSlashCommand(
 ) {
 	rawBody, err := readBody(request)
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte("Error while reading HTTP body."))
 		return
 	}
 
 	if valid := verifySignature(request.Header, rawBody); !valid {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte("Signature doesn't match with calculated one."))
 		return
 	}
 
 	text, err := getTextParam(rawBody)
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte(err.Error()))
 		return
 	}
 
 	db, err := database.CreateDatabase()
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte(err.Error()))
 		return
 	}
 	defer db.Close()
 
-	commandAndArguments := strings.Split(text, " ")
-	switch strings.TrimSpace(commandAndArguments[0]) {
-	case "get":
-		domain.Get(writer, request, db)
-		break
-	case "add":
-		domain.Add(writer, request, db, commandAndArguments[1:])
-		break
-	case "remove":
-		domain.Remove(writer, request, db, commandAndArguments[1:])
-		break
-	default:
-		http.Error(writer, "Unknown command. Only 'add', 'remove' & 'add' allowed", http.StatusBadRequest)
+	command, err := model.BuildSlashCommand(text, db)
+	if err != nil {
+		writer.Write([]byte(err.Error()))
+		return
 	}
+	result, err := command.Execute()
+	if err != nil {
+		writer.Write([]byte(err.Error()))
+		return
+	}
+	writer.Write([]byte(result))
 }
 
 func readBody(request *http.Request) ([]byte, error) {
@@ -114,9 +111,10 @@ func getTextParam(rawBody []byte) (string, error) {
 	log.Printf("KeyValues: %v\n", keyValues)
 
 	commandValue := keyValues["command"]
-	slashCommandText := keyValues["text"]
-	if commandValue == "" && slashCommandText == "" {
+	commandText := strings.Join(strings.Split(keyValues["text"], "+"), " ")
+	if commandValue == "" && commandText == "" {
 		return "", errors.New("Wrong query params provided")
 	}
-	return slashCommandText, nil
+
+	return commandText, nil
 }

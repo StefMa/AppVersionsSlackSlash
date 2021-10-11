@@ -11,23 +11,17 @@ import (
 	"strings"
 )
 
-func Get(
-	w http.ResponseWriter,
-	r *http.Request,
-	db database.Database,
-) {
+func Get(db database.Database) (string, error) {
 	storedData, err := db.Get()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return "", err
 	}
 	urlToAppVersions := generaterUrl(storedData["android"], storedData["ios"])
 	shortUrl, err := generateShortUrl(urlToAppVersions)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return "", err
 	}
-	w.Write([]byte(shortUrl))
+	return shortUrl, nil
 }
 
 func generaterUrl(androidAppIds []string, iosAppIds []string) string {

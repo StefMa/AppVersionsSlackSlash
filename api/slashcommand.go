@@ -21,36 +21,36 @@ func HandleSlashCommand(
 ) {
 	rawBody, err := readBody(request)
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte("Error while reading HTTP body."))
 		return
 	}
 
 	if valid := verifySignature(request.Header, rawBody); !valid {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte("Signature doesn't match with calculated one."))
 		return
 	}
 
 	text, err := getTextParam(rawBody)
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte(err.Error()))
 		return
 	}
 
 	db, err := database.CreateDatabase()
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte(err.Error()))
 		return
 	}
 	defer db.Close()
 
 	command, err := model.BuildSlashCommand(text, db)
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte(err.Error()))
 		return
 	}
 	result, err := command.Execute()
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.Write([]byte(err.Error()))
 		return
 	}
 	writer.Write([]byte(result))

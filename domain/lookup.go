@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Lookup(
+func lookup(
 	operatingSystem string,
 	appIds []string,
 ) (string, error) {

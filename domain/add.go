@@ -4,7 +4,7 @@ import (
 	"stefma.guru/appVersionsSlackSlash/database"
 )
 
-func Add(
+func add(
 	db database.Database,
 	operatingSystem string,
 	appIds []string,

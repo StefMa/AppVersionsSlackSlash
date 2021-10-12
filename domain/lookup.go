@@ -42,60 +42,70 @@ func Lookup(
 	if err := json.Unmarshal(bodyBytes, &jsonResponse); err != nil {
 		return "", err
 	}
-	return createSlackResponse(operatingSystem, jsonResponse), nil
+	return createslackResponse(operatingSystem, jsonResponse)
 }
 
-func createSlackResponse(
+func createslackResponse(
 	operatingSystem string,
 	lookupResponse lookupJsonResponse,
-) string {
-	jsonResponse := `{"blocks": [`
-	appBlock := ``
+) (string, error) {
+	jsonRequest := slackJsonRequest{
+		Blocks: []slackBlock{},
+	}
 	for _, app := range lookupResponse.AndroidApps {
-		appBlock = createAppBlock(app, appBlock, operatingSystem)
+		jsonRequest.Blocks = append(
+			jsonRequest.Blocks,
+			createAppBlock(app, operatingSystem)...,
+		)
 	}
 	for _, app := range lookupResponse.IosApps {
-		appBlock = createAppBlock(app, appBlock, operatingSystem)
+		jsonRequest.Blocks = append(
+			jsonRequest.Blocks,
+			createAppBlock(app, operatingSystem)...,
+		)
 	}
-	jsonResponse += appBlock
-	jsonResponse += `]}`
-	return jsonResponse
+
+	jsonBytes, err := json.Marshal(&jsonRequest)
+	if err != nil {
+		return "", err
+	}
+	log.Println("Sending json string: " + string(jsonBytes))
+	return string(jsonBytes), nil
 }
 
 func createAppBlock(
 	app app,
-	appBlock string,
 	operatingSystem string,
-) string {
+) []slackBlock {
 	text := fmt.Sprintf(
 		"Name: *%s*\nVersion: *%s*\nRating: *%s*\n",
 		app.Name, app.Version, app.Rating,
 	)
-	appBlock += `
-	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "` + text + `"
-		}
-	},
-	`
+	informationSectionBlock := slackBlock{
+		Type: "section",
+		Text: slackText{
+			Type: "mrkdwn",
+			Text: text,
+		},
+	}
+
 	text = fmt.Sprintf(
 		"<%s|*[Store]*> <https://appversions.vercel.app?%s=%s|*[AppVersions]*>",
 		app.URL,
 		operatingSystem,
 		app.ID,
 	)
-	appBlock += `
-	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "` + text + `"
-		}
-	},
-	`
-	return appBlock
+	linksSectionBlock := slackBlock{
+		Type: "section",
+		Text: slackText{
+			Type: "mrkdwn",
+			Text: text,
+		},
+	}
+	return []slackBlock{
+		informationSectionBlock,
+		linksSectionBlock,
+	}
 }
 
 type lookupJsonResponse struct {
@@ -109,4 +119,18 @@ type app struct {
 	Version string `json:"version"`
 	Rating  string `json:"rating"`
 	URL     string `json:"url"`
+}
+
+type slackJsonRequest struct {
+	Blocks []slackBlock `json:"blocks"`
+}
+
+type slackBlock struct {
+	Type string    `json:"type"`
+	Text slackText `json:"text"`
+}
+
+type slackText struct {
+	Type string `json:"type"`
+	Text string `json:"text"`
 }

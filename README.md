@@ -17,6 +17,11 @@ Get the current (shorted) URL from the saved appIds to [AppVersions](https://app
 /command get
 ```
 
+See the app versions information directly in slack
+```
+/command lookup [android|ios] appId0 appId1 ...
+```
+
 ## How to install
 ### Prerequisite
 * [Vercel](https://vercel.com/) account

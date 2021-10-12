@@ -53,6 +53,7 @@ func HandleSlashCommand(
 		writer.Write([]byte(err.Error()))
 		return
 	}
+	writer.Header().Add("Content-Type", "application/json")
 	writer.Write([]byte(result))
 }
 

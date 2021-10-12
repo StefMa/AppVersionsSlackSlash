@@ -47,6 +47,8 @@ func BuildSlashCommand(
 		}, nil
 	case "add":
 		fallthrough
+	case "lookup":
+		fallthrough
 	case "remove":
 		log.Printf("Build 'appVersionsSlashCommand' for '%s'\n", instruction)
 		operatingSystem := instructionAndArguments[1]
@@ -74,6 +76,8 @@ func (command appVersionsSlashCommand) Execute() (string, error) {
 	case "remove":
 		err := domain.Remove(command.db, command.operatingSystem, command.appIds)
 		return "Ok", err
+	case "lookup":
+		return domain.Lookup(command.operatingSystem, command.appIds)
 	default:
 		panic("We construct an 'appVersionsSlashCommand' with an unknown instructions: " + command.instruction)
 	}

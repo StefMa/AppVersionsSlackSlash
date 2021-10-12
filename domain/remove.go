@@ -4,7 +4,7 @@ import (
 	"stefma.guru/appVersionsSlackSlash/database"
 )
 
-func Remove(
+func remove(
 	db database.Database,
 	operatingSystem string,
 	appIds []string,

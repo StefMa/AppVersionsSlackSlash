@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func Get(db database.Database) (string, error) {
+func get(db database.Database) (string, error) {
 	storedData, err := db.Get()
 	if err != nil {
 		return "", err

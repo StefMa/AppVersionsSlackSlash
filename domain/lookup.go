@@ -7,10 +7,11 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"stefma.guru/appVersionsSlackSlash/domain/model"
 	"strings"
 )
 
-func Lookup(
+func lookup(
 	operatingSystem string,
 	appIds []string,
 ) (string, error) {
@@ -38,7 +39,7 @@ func Lookup(
 	if err != nil {
 		return "", err
 	}
-	var jsonResponse lookupJsonResponse
+	var jsonResponse model.AppVersionsJsonResponse
 	if err := json.Unmarshal(bodyBytes, &jsonResponse); err != nil {
 		return "", err
 	}
@@ -47,18 +48,18 @@ func Lookup(
 
 func createslackResponse(
 	operatingSystem string,
-	lookupResponse lookupJsonResponse,
+	appVersionsJsonResponse model.AppVersionsJsonResponse,
 ) (string, error) {
-	jsonRequest := slackJsonRequest{
-		Blocks: []slackBlock{},
+	jsonRequest := model.SlackJsonRequest{
+		Blocks: []model.SlackBlock{},
 	}
-	for _, app := range lookupResponse.AndroidApps {
+	for _, app := range appVersionsJsonResponse.AndroidApps {
 		jsonRequest.Blocks = append(
 			jsonRequest.Blocks,
 			createAppBlock(app, operatingSystem)...,
 		)
 	}
-	for _, app := range lookupResponse.IosApps {
+	for _, app := range appVersionsJsonResponse.IosApps {
 		jsonRequest.Blocks = append(
 			jsonRequest.Blocks,
 			createAppBlock(app, operatingSystem)...,
@@ -74,16 +75,16 @@ func createslackResponse(
 }
 
 func createAppBlock(
-	app app,
+	app model.AppVersionsApp,
 	operatingSystem string,
-) []slackBlock {
+) []model.SlackBlock {
 	text := fmt.Sprintf(
 		"Name: *%s*\nVersion: *%s*\nRating: *%s*\n",
 		app.Name, app.Version, app.Rating,
 	)
-	informationSectionBlock := slackBlock{
+	informationSectionBlock := model.SlackBlock{
 		Type: "section",
-		Text: slackText{
+		Text: model.SlackText{
 			Type: "mrkdwn",
 			Text: text,
 		},
@@ -95,42 +96,15 @@ func createAppBlock(
 		operatingSystem,
 		app.ID,
 	)
-	linksSectionBlock := slackBlock{
+	linksSectionBlock := model.SlackBlock{
 		Type: "section",
-		Text: slackText{
+		Text: model.SlackText{
 			Type: "mrkdwn",
 			Text: text,
 		},
 	}
-	return []slackBlock{
+	return []model.SlackBlock{
 		informationSectionBlock,
 		linksSectionBlock,
 	}
-}
-
-type lookupJsonResponse struct {
-	AndroidApps []app `json:"android"`
-	IosApps     []app `json:"ios"`
-}
-
-type app struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Version string `json:"version"`
-	Rating  string `json:"rating"`
-	URL     string `json:"url"`
-}
-
-type slackJsonRequest struct {
-	Blocks []slackBlock `json:"blocks"`
-}
-
-type slackBlock struct {
-	Type string    `json:"type"`
-	Text slackText `json:"text"`
-}
-
-type slackText struct {
-	Type string `json:"type"`
-	Text string `json:"text"`
 }

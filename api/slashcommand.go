@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"os"
 	"stefma.guru/appVersionsSlackSlash/database"
-	"stefma.guru/appVersionsSlackSlash/domain/model"
+	"stefma.guru/appVersionsSlackSlash/domain"
 	"strings"
 )
 
@@ -43,12 +43,12 @@ func HandleSlashCommand(
 	}
 	defer db.Close()
 
-	command, err := model.BuildSlashCommand(text, db)
+	command, err := domain.BuildSlashCommand(text, db)
 	if err != nil {
 		writer.Write([]byte(err.Error()))
 		return
 	}
-	result, err := command.Execute()
+	result, err := domain.Execute(command)
 	if err != nil {
 		writer.Write([]byte(err.Error()))
 		return

@@ -71,6 +71,8 @@ After we set up all the environment variables we have to redeploy the vercel pro
 Otherwise the environment variables aren't visible.
 
 ### Firebase
+
+#### Firestore
 Beside of the stuff we did already to set up vercel, we also have to enable Firebase Firestore.
 
 Simply click on the menu entry and `Create Database`.
@@ -86,6 +88,16 @@ service cloud.firestore {
   }
 }
 ```
+
+#### Dynamic Links
+We also have to set up an "Allowlist URL pattern".
+
+The following URL should be added to that list. All others (in case there are one) can be removed:
+```
+^https://appversions\.vercel\.app\?.*$
+```
+
+See also for more information [this guide](https://support.google.com/firebase/answer/9021429?hl=en).
 
 ### Slack
 We have to create a new Slack App, which contains nothing else than an Slash Command.

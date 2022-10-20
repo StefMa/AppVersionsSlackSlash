@@ -99,7 +99,6 @@ The following URL should be added to that list. All others (in case there are on
 
 See also for more information [this guide](https://support.google.com/firebase/answer/9021429?hl=en).
 
-
 ### Slack
 We have to create a new Slack App, which contains nothing else than an Slash Command.
 

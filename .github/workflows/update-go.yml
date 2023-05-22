@@ -40,7 +40,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const owner = "StefMa";
-            const repo = "AppVersionsAppVersionsSlackSlash";
+            const repo = "AppVersionsSlackSlash";
             const title = "Update go version to ${{ steps.check-go-version.outputs.goVersion }}";
             const body = '';
             const head = "${{ steps.check-go-version.outputs.branchName }}";

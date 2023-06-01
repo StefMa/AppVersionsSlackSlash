@@ -4,15 +4,31 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
-	"stefma.guru/appVersionsSlackSlash/database"
 	"strings"
+
+	"stefma.guru/appVersionsSlackSlash/database"
 )
 
-func get(db database.Database) (string, error) {
-	storedData, err := db.Get()
+func get(
+	db database.Database,
+	operatingSystem string,
+) (string, error) {
+	switch operatingSystem {
+	case "android":
+		break
+	case "ios":
+		break
+	default:
+		if operatingSystem != "" {
+			log.Printf("Not supported operatingSystem '%s'. Fallback to 'all'", operatingSystem)
+		}
+		operatingSystem = "all"
+	}
+	storedData, err := db.Get(operatingSystem)
 	if err != nil {
 		return "", err
 	}

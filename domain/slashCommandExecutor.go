@@ -28,8 +28,12 @@ func BuildSlashCommand(
 		fallthrough
 	case "remove":
 		log.Printf("Build 'appVersionsSlashCommand' for '%s'\n", instruction)
-		operatingSystem := instructionAndArguments[1]
-		args := instructionAndArguments[2:]
+		var operatingSystem string
+		var args []string
+		if len(instructionAndArguments) != 1 {
+			operatingSystem = instructionAndArguments[1]
+			args = instructionAndArguments[2:]
+		}
 		return &model.SlashCommand{
 			DB:              db,
 			Instruction:     instruction,

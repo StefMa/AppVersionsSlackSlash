@@ -39,7 +39,7 @@ func (db Database) Get(operatingSystem string) (map[string][]string, error) {
 }
 
 func (db Database) get(operatingSystem string) ([]string, error) {
-	docSnapsAndroid, err := db.client.
+	docSnapshot, err := db.client.
 		Collection(operatingSystem).
 		Documents(db.context).
 		GetAll()
@@ -47,9 +47,9 @@ func (db Database) get(operatingSystem string) ([]string, error) {
 		return nil, err
 	}
 
-	var androidAppIds []string
-	for _, docSnap := range docSnapsAndroid {
-		androidAppIds = append(androidAppIds, docSnap.Ref.ID)
+	var appIds []string
+	for _, docSnap := range docSnapshot {
+		appIds = append(appIds, docSnap.Ref.ID)
 	}
-	return androidAppIds, nil
+	return appIds, nil
 }

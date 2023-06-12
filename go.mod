@@ -5,7 +5,7 @@ go 1.20
 require (
 	cloud.google.com/go/firestore v1.10.0
 	firebase.google.com/go/v4 v4.11.0
-	google.golang.org/api v0.125.0
+	google.golang.org/api v0.126.0
 )
 
 require (

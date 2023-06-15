@@ -93,7 +93,7 @@ func createAppBlock(
 	}
 
 	text = fmt.Sprintf(
-		"<%s|*[Store]*> <https://%s?%s=%s|*[AppVersions]*>",
+		"<%s|*[Store]*> <%s/lookup?%s=%s|*[AppVersions]*>",
 		app.URL,
 		AppVersioBaseUrl,
 		operatingSystem,

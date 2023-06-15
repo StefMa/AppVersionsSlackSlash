@@ -9,6 +9,8 @@ import (
 	"stefma.guru/appVersionsSlackSlash/domain/model"
 )
 
+const AppVersioBaseUrl = "https://appvers.io"
+
 // BuildSlashCommand will construct an SlashCommand
 func BuildSlashCommand(
 	text string,

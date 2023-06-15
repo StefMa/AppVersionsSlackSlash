@@ -7,8 +7,9 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"stefma.guru/appVersionsSlackSlash/domain/model"
 	"strings"
+
+	"stefma.guru/appVersionsSlackSlash/domain/model"
 )
 
 func lookup(
@@ -25,7 +26,8 @@ func lookup(
 
 	appIdsString := strings.Join(appIds, ",")
 	url := fmt.Sprintf(
-		"https://appversions.vercel.app/?%s=%s&format=json",
+		"%s/lookup?%s=%s&format=json",
+		AppVersioBaseUrl,
 		operatingSystem,
 		appIdsString,
 	)
@@ -91,8 +93,9 @@ func createAppBlock(
 	}
 
 	text = fmt.Sprintf(
-		"<%s|*[Store]*> <https://appversions.vercel.app?%s=%s|*[AppVersions]*>",
+		"<%s|*[Store]*> <https://%s?%s=%s|*[AppVersions]*>",
 		app.URL,
+		AppVersioBaseUrl,
 		operatingSystem,
 		app.ID,
 	)

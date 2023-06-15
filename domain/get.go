@@ -48,11 +48,12 @@ func generaterUrl(androidAppIds []string, iosAppIds []string) string {
 	if len(iosAppIds) > 0 {
 		params.Add("ios", strings.Join(iosAppIds, ","))
 	}
-	appVersionsLink := "https://appversions.vercel.app?" + url.QueryEscape(params.Encode())
+	appVersionsLink := AppVersioBaseUrl + "/lookup?" + url.QueryEscape(params.Encode())
 	return appVersionsLink
 }
 
 func generateShortUrl(longUrl string) (string, error) {
+	log.Println("LongUrl: " + longUrl)
 	apiKey := os.Getenv("FIREBASE_DYNAMIC_LINKS_API_KEY")
 	url := "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=" + apiKey
 	shortUrlDomain := os.Getenv("FIREBASE_DYNAMIC_LINKS_DOMAIN")
@@ -70,6 +71,7 @@ func generateShortUrl(longUrl string) (string, error) {
 	}
 	defer resp.Body.Close()
 	bodyBytes, err := io.ReadAll(resp.Body)
+	log.Println("Body: " + string(bodyBytes))
 	if err != nil {
 		return "", err
 	}

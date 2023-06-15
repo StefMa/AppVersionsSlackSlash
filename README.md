@@ -43,7 +43,7 @@ The content of the `*.json` file has to be placed to this environment variable.
 
 **`FIREBASE_DYNAMIC_LINKS_DOMAIN`**
 </br>
-As we shorten the [AppVersions](https://appversions.vercel.app/) URL, you have to enable Firebase Dynamic Links and create a new (free) domain for it. You can literally choose any subdomain name of `.page.link`.
+As we shorten the [AppVers.io](https://AppVers.io/) URL, you have to enable Firebase Dynamic Links and create a new (free) domain for it. You can literally choose any subdomain name of `.page.link`.
 
 Place the URL (e.g. `https://appversions.page.link`) to this environment variable.
 
@@ -94,7 +94,7 @@ We also have to set up an "Allowlist URL pattern".
 
 The following URL should be added to that list. All others (in case there are one) can be removed:
 ```
-^https://appversions\.vercel\.app\?.*$
+^https://appvers\.io/lookup\?.*$
 ```
 
 See also for more information [this guide](https://support.google.com/firebase/answer/9021429?hl=en).

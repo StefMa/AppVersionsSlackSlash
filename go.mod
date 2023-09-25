@@ -3,7 +3,7 @@ module stefma.guru/appVersionsSlackSlash
 go 1.20
 
 require (
-	cloud.google.com/go/firestore v1.12.0
+	cloud.google.com/go/firestore v1.13.0
 	firebase.google.com/go/v4 v4.12.0
 	google.golang.org/api v0.141.0
 )

@@ -5,7 +5,7 @@ go 1.20
 require (
 	cloud.google.com/go/firestore v1.15.0
 	firebase.google.com/go/v4 v4.13.0
-	google.golang.org/api v0.171.0
+	google.golang.org/api v0.172.0
 )
 
 require (
@@ -43,7 +43,7 @@ require (
 	google.golang.org/appengine/v2 v2.0.2 // indirect
 	google.golang.org/genproto v0.0.0-20240213162025-012b6fc9bca9 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240311132316-a219d84964c2 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240314234333-6e1732d8331c // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
 	google.golang.org/grpc v1.62.1 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 )

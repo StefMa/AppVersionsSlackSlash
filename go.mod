@@ -1,6 +1,6 @@
 module stefma.guru/appVersionsSlackSlash
 
-go 1.23.1
+go 1.23.2
 
 require (
 	cloud.google.com/go/firestore v1.17.0
